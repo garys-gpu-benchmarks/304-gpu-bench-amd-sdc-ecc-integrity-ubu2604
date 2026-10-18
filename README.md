@@ -17,7 +17,7 @@ Results are written to `results/benchmark.db` and `results/summary.json`.
 
 This workload is executed on the validation host after the repository is copied there. `setup.sh` and `run_benchmark.sh` do not open an outbound SSH session.
 
-Prerequisites: Ubuntu 26.04; AMD; Python 3.14.N (uv-managed; all benchmark venvs; same build as 24.04). System python3.14 retained for OS and setup scripts only; root or sudo for `setup.sh`. Framework: Bash, SQLite, Python, PyYAML, ROCm Runtime, PyTorch-ROCm. This is a host benchmark, not a laptop `pip install` project.
+Prerequisites: Ubuntu 26.04; AMD; Python 3.14.8 (uv-managed CPython from `uv python install 3.14`; all benchmark venvs; same build as 24.04). System Python 3.14.4 retained for OS and setup scripts only; root or sudo for `setup.sh`. Framework: Bash, SQLite, Python, PyYAML, ROCm Runtime, PyTorch-ROCm. This is a host benchmark, not a laptop `pip install` project.
 
 ```mermaid
 flowchart LR
@@ -32,14 +32,14 @@ This repository is one of the 32 workloads in the AMD Ubuntu 26.04 bundle, [`bun
 apt-get update && apt-get install -y git
 git clone --recurse-submodules https://github.com/garys-gpu-benchmarks/bundle-amd-ubuntu-2604 /opt/benchmarks \
   && cd /opt/benchmarks \
-  && ./run.sh list \
+  && ./run_benchmark_suite.sh --list \
   && cd /opt/benchmarks/304-gpu-bench-amd-sdc-ecc-integrity-ubu2604 \
   && bash run_benchmark.sh --profile smoke --validate \
   && cd /opt/benchmarks \
   && echo "Done: 32 workloads in /opt/benchmarks; 304-gpu-bench-amd-sdc-ecc-integrity-ubu2604 smoke run passed. Next: ./run_benchmark_suite.sh --help"
 ```
 
-Every line in `./run.sh list` should show `ready`. The commands are joined with `&&`, so if the clone or the smoke run fails, the chain stops there, and the closing message appears only when everything succeeded. The chain ends in `/opt/benchmarks`, where the suite runner is. For more extensive testing:
+Every line in `./run_benchmark_suite.sh --list` should show `ready`; it exits with an error if any workload is not fetched. The commands are joined with `&&`, so if the clone, the list or the smoke run fails, the chain stops there, and the closing message appears only when everything succeeded. The chain ends in `/opt/benchmarks`, where the suite runner is. For more extensive testing:
 
 ```bash
 ./run_benchmark_suite.sh -p smoke                 # smoke test of all 32 workloads
@@ -73,8 +73,8 @@ Three operator scripts from [`garys-gpu-benchmarks/gpu-bench-suite`](https://git
 - **`get_remote_info.sh`** (on your laptop; Git Bash on Windows) — over one SSH connection, copies the runtime ledger and every workload's `results/raw`, `results/parsed` and suite logs into `RUNTIME_LEDGERS/` and `DIRECTORIES/`.
   ```bash
   git clone https://github.com/garys-gpu-benchmarks/gpu-bench-suite && cd gpu-bench-suite
-  ./scripts/get_remote_info.sh 203.0.113.10                     # root@host, port 22
-  ./scripts/get_remote_info.sh -i ~/.ssh/id_ed25519 -o ~/results ubuntu@203.0.113.10 2222
+  ./scripts/get_remote_info.sh --host 203.0.113.10              # root@host, port 22
+  ./scripts/get_remote_info.sh --host ubuntu@203.0.113.10 --port 2222 -i ~/.ssh/id_ed25519 -o ~/results
   ```
 - **`show_metrics.sh`** (laptop or GPU host) — prints one workload's runs from the runtime ledger in fixed-width metric columns with per-profile means. On the GPU host it is `/opt/benchmarks/show_metrics.sh`.
   ```bash
@@ -85,24 +85,24 @@ Three operator scripts from [`garys-gpu-benchmarks/gpu-bench-suite`](https://git
 
 ## 1. Overview
 
-Runs a PyTorch GPU (or CPU) int32 buffer check that writes 1 to even-index elements and verifies them, then reports a 0-100 pass rate in even_word_store_pass_rate. duration: wall-clock cap (values >=10000 treated as milliseconds). num_iterations: verify loops. memory_size: allocation size in GB (clamped to at least 0.125). Sweep dimensions: device_id, memory_size, pattern_type, ecc_check, num_iterations, output_format, duration, count.
+Runs a PyTorch GPU (or CPU) int32 buffer check that writes 1 to even-index elements and verifies them, then reports a 0-100 pass rate in loop_verification_pass_pct. duration: wall-clock cap (values >=10000 treated as milliseconds). num_iterations: verify loops. memory_size: allocation size in GB (clamped to at least 0.125). Sweep dimensions: device_id, memory_size, pattern_type, ecc_check, num_iterations, output_format, duration, count.
 
 ## 2. What It Validates
 
-- Validates that the even-index int32 write/verify loop completes and reports the allocated GPU buffer size plus a 0-100 pass rate. RAS counter deltas come from rocm-smi. RVS is not used
+- Validates that the even-index int32 write/verify loop completes and reports the allocated GPU buffer size plus a 0-100 pass rate. RAS counter deltas come from amd-smi metric. RVS is not used
 - #1: RAS uncorrectable counter delta (uncorrected_ecc_errors_count); is present and physically sensible.
 - #2: RAS correctable counter delta (corrected_ecc_errors_count); is present and physically sensible.
 - #3: Wall-clock time, s (test_wall_clock_completion_time_s); is present and physically sensible.
-- #4: Allocated verification buffer, GB (hbm3_coverage_gb); is present and physically sensible.
-- #5: Even-index int32 verification pass rate (even_word_store_pass_rate) is present and physically sensible.
+- #4: Allocated verification buffer, GB (allocated_verification_buffer_gb); is present and physically sensible.
+- #5: Loop verification pass rate, % (loop_verification_pass_pct) is present and physically sensible.
 
 ## 3. Metrics Captured
 
 - **#1: RAS uncorrectable counter delta** — stored as `uncorrected_ecc_errors_count`.
 - **#2: RAS correctable counter delta** — stored as `corrected_ecc_errors_count`.
 - **#3: Wall-clock time, s** — stored as `test_wall_clock_completion_time_s`.
-- **#4: Allocated verification buffer, GB** — stored as `hbm3_coverage_gb`.
-- **#5: Even-index int32 verification pass rate** — stored as `even_word_store_pass_rate`.
+- **#4: Allocated verification buffer, GB** — stored as `allocated_verification_buffer_gb`.
+- **#5: Loop verification pass rate, %** — stored as `loop_verification_pass_pct`.
 
 ## 4. Hardware Requirements
 
@@ -111,7 +111,7 @@ Runs a PyTorch GPU (or CPU) int32 buffer check that writes 1 to even-index eleme
 - OS: Ubuntu 26.04
 - GPU vendor: AMD
 - Framework family: Bash, SQLite, Python, PyYAML, ROCm Runtime, PyTorch-ROCm
-- Python: Python 3.14.N (uv-managed; all benchmark venvs; same build as 24.04). System python3.14 retained for OS and setup scripts only
+- Python: Python 3.14.8 (uv-managed CPython from `uv python install 3.14`; all benchmark venvs; same build as 24.04). System Python 3.14.4 retained for OS and setup scripts only
 
 ### Reference validation environment
 
@@ -131,11 +131,11 @@ Ubuntu 26.04 / AMD / Bash, SQLite, Python, PyYAML, ROCm Runtime, PyTorch-ROCm
 |---|---|
 | OS | Ubuntu 26.04 |
 | Kernel | kernel 7.0.0 |
-| Python | Python 3.14.N (uv-managed; all benchmark venvs; same build as 24.04). System python3.14 retained for OS and setup scripts only |
+| Python | Python 3.14.8 (uv-managed CPython from `uv python install 3.14`; all benchmark venvs; same build as 24.04). System Python 3.14.4 retained for OS and setup scripts only |
 | ROCm | ROCm 10.1.0 |
 | rocBLAS | N/A - rocBLAS not used |
 
-Runs a PyTorch GPU (or CPU) int32 buffer check that writes 1 to even-index elements and verifies them, then reports a 0-100 pass rate in even_word_store_pass_rate. duration: wall-clock cap (values >=10000 treated as milliseconds). num_iterations: verify loops.
+Runs a PyTorch GPU (or CPU) int32 buffer check that writes 1 to even-index elements and verifies them, then reports a 0-100 pass rate in loop_verification_pass_pct. duration: wall-clock cap (values >=10000 treated as milliseconds). num_iterations: verify loops.
 
 ## 6. Installation
 
@@ -164,7 +164,7 @@ source ".venv/bin/activate"
 
 CSV aggregate of the verify run. A single row is duplicated to two samples
 
-sample_index,status,uncorrected_ecc_errors_count,corrected_ecc_errors_count,hbm3_coverage_gb,even_word_store_pass_rate,test_wall_clock_completion_time_s,error_message
+sample_index,status,uncorrected_ecc_errors_count,corrected_ecc_errors_count,hbm3_coverage_gb,loop_verification_pass_pct,test_wall_clock_completion_time_s,error_message
 0,ok,0,0,0.125,100,1.2,
 
 ```bash
@@ -179,7 +179,7 @@ Consolidated metrics from the most recent run — suitable for CI artifact uploa
 
 CSV aggregate of the verify run. A single row is duplicated to two samples
 
-sample_index,status,uncorrected_ecc_errors_count,corrected_ecc_errors_count,hbm3_coverage_gb,even_word_store_pass_rate,test_wall_clock_completion_time_s,error_message
+sample_index,status,uncorrected_ecc_errors_count,corrected_ecc_errors_count,hbm3_coverage_gb,loop_verification_pass_pct,test_wall_clock_completion_time_s,error_message
 0,ok,0,0,0.125,100,1.2,
 
 ## 9. Baselines / Thresholds

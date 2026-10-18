@@ -15,13 +15,13 @@ This PRD.md section is populated from benchmark_specification.json, which is the
 Silent Data Corruption (SDC)
 
 ## Execution Summary (Run and Measure)
-Run an in-process PyTorch check that writes 1 to even-index elements of a GPU or CPU int32 buffer for yaml duration and num_iterations, then emit hbm3_coverage_gb and a 0-100 even_word_store_pass_rate, to measure buffer integrity. RAS counter deltas come from rocm-smi. RVS is not used
+Run an in-process PyTorch check that writes 1 to even-index elements of a GPU or CPU int32 buffer for yaml duration and num_iterations, then emit hbm3_coverage_gb and a 0-100 loop_verification_pass_pct, to measure buffer integrity. RAS counter deltas come from amd-smi metric. RVS is not used
 
 ## Main Goal
 Analyze GPU buffer even-index write/verify integrity via a PyTorch SDC stub
 
 ## Validation Objective
-Validates that the even-index int32 write/verify loop completes and reports the allocated GPU buffer size plus a 0-100 pass rate. RAS counter deltas come from rocm-smi. RVS is not used
+Validates that the even-index int32 write/verify loop completes and reports the allocated GPU buffer size plus a 0-100 pass rate. RAS counter deltas come from amd-smi metric. RVS is not used
 
 ## Workload Category
 System Validation & Reliability

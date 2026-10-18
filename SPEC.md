@@ -2,7 +2,7 @@
 
 ## Execution Description
 
-Runs a PyTorch GPU (or CPU) int32 buffer check that writes 1 to even-index elements and verifies them, then reports a 0-100 pass rate in even_word_store_pass_rate. duration: wall-clock cap (values >=10000 treated as milliseconds). num_iterations: verify loops. memory_size: allocation size in GB (clamped to at least 0.125). Sweep dimensions: device_id, memory_size, pattern_type, ecc_check, num_iterations, output_format, duration, count.
+Runs a PyTorch GPU (or CPU) int32 buffer check that writes 1 to even-index elements and verifies them, then reports a 0-100 pass rate in loop_verification_pass_pct. duration: wall-clock cap (values >=10000 treated as milliseconds). num_iterations: verify loops. memory_size: allocation size in GB (clamped to at least 0.125). Sweep dimensions: device_id, memory_size, pattern_type, ecc_check, num_iterations, output_format, duration, count.
 
 ## Parameters
 
@@ -28,7 +28,7 @@ Run an in-process PyTorch even-index int32 write/verify on cuda:0 when available
 
 CSV aggregate of the verify run. A single row is duplicated to two samples
 
-sample_index,status,uncorrected_ecc_errors_count,corrected_ecc_errors_count,hbm3_coverage_gb,even_word_store_pass_rate,test_wall_clock_completion_time_s,error_message
+sample_index,status,uncorrected_ecc_errors_count,corrected_ecc_errors_count,hbm3_coverage_gb,loop_verification_pass_pct,test_wall_clock_completion_time_s,error_message
 0,ok,0,0,0.125,100,1.2,
 
 ## Metrics
@@ -36,16 +36,16 @@ sample_index,status,uncorrected_ecc_errors_count,corrected_ecc_errors_count,hbm3
 - **#1: RAS uncorrectable counter delta** — stored as `uncorrected_ecc_errors_count`.
 - **#2: RAS correctable counter delta** — stored as `corrected_ecc_errors_count`.
 - **#3: Wall-clock time, s** — stored as `test_wall_clock_completion_time_s`.
-- **#4: Allocated verification buffer, GB** — stored as `hbm3_coverage_gb`.
-- **#5: Even-index int32 verification pass rate** — stored as `even_word_store_pass_rate`.
+- **#4: Allocated verification buffer, GB** — stored as `allocated_verification_buffer_gb`.
+- **#5: Loop verification pass rate, %** — stored as `loop_verification_pass_pct`.
 
 ## Framework
 
-Runs a PyTorch GPU (or CPU) int32 buffer check that writes 1 to even-index elements and verifies them, then reports a 0-100 pass rate in even_word_store_pass_rate. duration: wall-clock cap (values >=10000 treated as milliseconds). num_iterations: verify loops.
+Runs a PyTorch GPU (or CPU) int32 buffer check that writes 1 to even-index elements and verifies them, then reports a 0-100 pass rate in loop_verification_pass_pct. duration: wall-clock cap (values >=10000 treated as milliseconds). num_iterations: verify loops.
 
 ## Installation and Execution Summary
 
-Run an in-process PyTorch check that writes 1 to even-index elements of a GPU or CPU int32 buffer for yaml duration and num_iterations, then emit hbm3_coverage_gb and a 0-100 even_word_store_pass_rate, to measure buffer integrity. RAS counter deltas come from rocm-smi. RVS is not used
+Run an in-process PyTorch check that writes 1 to even-index elements of a GPU or CPU int32 buffer for yaml duration and num_iterations, then emit hbm3_coverage_gb and a 0-100 loop_verification_pass_pct, to measure buffer integrity. RAS counter deltas come from amd-smi metric. RVS is not used
 
 ## Platform Portability
 
@@ -84,7 +84,7 @@ BENCHMARK_DB=tests/fixtures/benchmark.db \
 
 CSV aggregate of the verify run. A single row is duplicated to two samples
 
-sample_index,status,uncorrected_ecc_errors_count,corrected_ecc_errors_count,hbm3_coverage_gb,even_word_store_pass_rate,test_wall_clock_completion_time_s,error_message
+sample_index,status,uncorrected_ecc_errors_count,corrected_ecc_errors_count,hbm3_coverage_gb,loop_verification_pass_pct,test_wall_clock_completion_time_s,error_message
 0,ok,0,0,0.125,100,1.2,
 
 ```bash
@@ -101,10 +101,10 @@ bash run_benchmark.sh --profile extended --validate
 2. `run.error_message` is NULL.
 3. `started_at` and `finished_at` are valid ISO-8601 UTC strings.
 4. All required aggregate metrics in `runs` are non-NULL and finite.
-5. All required aggregate metrics are physically sensible (positive values). Runs a PyTorch GPU (or CPU) int32 buffer check that writes 1 to even-index elements and verifies them, then reports a 0-100 pass rate in even_word_store_pass_rate. duration: wall-clock cap (values >=10000 treated as milliseconds). num_iterations: verify loops.
+5. All required aggregate metrics are physically sensible (positive values). Runs a PyTorch GPU (or CPU) int32 buffer check that writes 1 to even-index elements and verifies them, then reports a 0-100 pass rate in loop_verification_pass_pct. duration: wall-clock cap (values >=10000 treated as milliseconds). num_iterations: verify loops.
 6. At least 2 sample rows exist for the latest `run_id` (sweep coverage).
 7. No sample has `status = 'error'`.
-8. Runs a PyTorch GPU (or CPU) int32 buffer check that writes 1 to even-index elements and verifies them, then reports a 0-100 pass rate in even_word_store_pass_rate. duration: wall-clock cap (values >=10000 treated as milliseconds). num_iterations: verify loops.
+8. Runs a PyTorch GPU (or CPU) int32 buffer check that writes 1 to even-index elements and verifies them, then reports a 0-100 pass rate in loop_verification_pass_pct. duration: wall-clock cap (values >=10000 treated as milliseconds). num_iterations: verify loops.
 
 ### Baseline / Threshold configuration (`config/benchmark_config.yaml`)
 

@@ -32,12 +32,12 @@
   {
     "field_name": "Validation Objective",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "Validates that the even-index int32 write/verify loop completes and reports the allocated GPU buffer size plus a 0-100 pass rate. RAS counter deltas come from rocm-smi. RVS is not used"
+    "value": "Validates that the even-index int32 write/verify loop completes and reports the allocated GPU buffer size plus a 0-100 pass rate. RAS counter deltas come from amd-smi metric. RVS is not used"
   },
   {
     "field_name": "Metrics",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "#1: RAS uncorrectable counter delta (uncorrected_ecc_errors_count); #2: RAS correctable counter delta (corrected_ecc_errors_count); #3: Wall-clock time, s (test_wall_clock_completion_time_s); #4: Allocated verification buffer, GB (hbm3_coverage_gb); #5: Even-index int32 verification pass rate (even_word_store_pass_rate)"
+    "value": "#1: RAS uncorrectable counter delta (uncorrected_ecc_errors_count); #2: RAS correctable counter delta (corrected_ecc_errors_count); #3: Wall-clock time, s (test_wall_clock_completion_time_s); #4: Allocated verification buffer, GB (allocated_verification_buffer_gb); #5: Loop verification pass rate, % (loop_verification_pass_pct)"
   },
   {
     "field_name": "Command Tools Executed",
@@ -47,7 +47,7 @@
   {
     "field_name": "Command Execution Details and Purpose",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "Run an in-process PyTorch check that writes 1 to even-index elements of a GPU or CPU int32 buffer for yaml duration and num_iterations, then emit hbm3_coverage_gb and a 0-100 even_word_store_pass_rate, to measure buffer integrity. RAS counter deltas come from rocm-smi. RVS is not used"
+    "value": "Run an in-process PyTorch check that writes 1 to even-index elements of a GPU or CPU int32 buffer for yaml duration and num_iterations, then emit hbm3_coverage_gb and a 0-100 loop_verification_pass_pct, to measure buffer integrity. RAS counter deltas come from amd-smi metric. RVS is not used"
   },
   {
     "field_name": "Command Methodology",
@@ -57,7 +57,7 @@
   {
     "field_name": "Execution Description With Parameters",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "Runs a PyTorch GPU (or CPU) int32 buffer check that writes 1 to even-index elements and verifies them, then reports a 0-100 pass rate in even_word_store_pass_rate. duration: wall-clock cap (values >=10000 treated as milliseconds). num_iterations: verify loops. memory_size: allocation size in GB (clamped to at least 0.125). pattern_type, ecc_check, device_id, and seed are yaml fields and are not applied. This is not rvs. Uncorrected and corrected columns are rocm-smi RAS counter deltas, or na when the RAS table does not parse. A CPU fallback leaves hbm3_coverage_gb blank. output_format: csv"
+    "value": "Runs a PyTorch GPU (or CPU) int32 buffer check that writes 1 to even-index elements and verifies them, then reports a 0-100 pass rate in loop_verification_pass_pct. duration: wall-clock cap (values >=10000 treated as milliseconds). num_iterations: verify loops. memory_size: allocation size in GB (clamped to at least 0.125). pattern_type, ecc_check, device_id, and seed are yaml fields and are not applied. This is not rvs. Uncorrected and corrected columns are amd-smi metric RAS counter deltas, or na when the RAS table does not parse. A CPU fallback leaves hbm3_coverage_gb blank. output_format: csv"
   },
   {
     "field_name": "Execution Domain",
@@ -97,7 +97,7 @@
   {
     "field_name": "Raw Output Example",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "sample_index,status,uncorrected_ecc_errors_count,corrected_ecc_errors_count,hbm3_coverage_gb,even_word_store_pass_rate,test_wall_clock_completion_time_s,error_message\n0,ok,0,0,0.125,100,1.2,"
+    "value": "sample_index,status,uncorrected_ecc_errors_count,corrected_ecc_errors_count,hbm3_coverage_gb,loop_verification_pass_pct,test_wall_clock_completion_time_s,error_message\n0,ok,0,0,0.125,100,1.2,"
   },
   {
     "field_name": "run_benchmark Command Plus Options for Smoke Run",
@@ -117,7 +117,7 @@
   {
     "field_name": "Output Fields / Metrics to Parse",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "uncorrected_ecc_errors_count, corrected_ecc_errors_count, test_wall_clock_completion_time_s, hbm3_coverage_gb, even_word_store_pass_rate"
+    "value": "uncorrected_ecc_errors_count, corrected_ecc_errors_count, test_wall_clock_completion_time_s, hbm3_coverage_gb, loop_verification_pass_pct"
   },
   {
     "field_name": "Success Criteria",
@@ -127,7 +127,7 @@
   {
     "field_name": "Parser and Normalization Notes",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "ECC fields are rocm-smi RAS counter deltas. A table that names the columns and yields no counts is na (RAS table not parsed). hbm3_coverage_gb is the allocated int32 buffer in GB (n*4/1e9), capped near half of free VRAM. The even-word pass rate also checks odd indexes. The aggregate row is written twice"
+    "value": "ECC fields are amd-smi metric RAS counter deltas. A table that names the columns and yields no counts is na (RAS table not parsed). hbm3_coverage_gb is the allocated int32 buffer in GB (n*4/1e9), capped near half of free VRAM. loop_verification_pass_pct is the percent of write/verify loops with no mismatch; each loop checks the even and the odd indexes. The aggregate row is written twice"
   },
   {
     "field_name": "Hardware Config",
@@ -162,7 +162,7 @@
   {
     "field_name": "Python Version",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "Python 3.14.N (uv-managed; all benchmark venvs; same build as 24.04). System python3.14 retained for OS and setup scripts only"
+    "value": "Python 3.14.8 (uv-managed CPython from `uv python install 3.14`; all benchmark venvs; same build as 24.04). System Python 3.14.4 retained for OS and setup scripts only"
   },
   {
     "field_name": "GPU Runtime Version (was ROCm Version)",
@@ -217,12 +217,12 @@
   {
     "field_name": "g++ Version",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "N/A - CMake not used"
+    "value": "N/A - g++ not used"
   },
   {
     "field_name": "Known Runtime Constraints (<=35 Words Each)",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "This is an even-index int32 check, not rvs or walking-1s. RAS deltas stay blank when rocm-smi is missing. Exclusive GPU preferred for large allocations"
+    "value": "This is an even-index int32 check, not rvs or walking-1s. RAS deltas stay blank when amd-smi reports no RAS counters. Exclusive GPU preferred for large allocations"
   },
   {
     "field_name": "Parameter_01",
@@ -362,12 +362,12 @@
   {
     "field_name": "Schema Last Updated",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "2026-09-05"
+    "value": "2026-10-17"
   },
   {
     "field_name": "Installation and Execution Summary",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "Run an in-process PyTorch check that writes 1 to even-index elements of a GPU or CPU int32 buffer for yaml duration and num_iterations, then emit hbm3_coverage_gb and a 0-100 even_word_store_pass_rate, to measure buffer integrity. RAS counter deltas come from rocm-smi. RVS is not used"
+    "value": "Run an in-process PyTorch check that writes 1 to even-index elements of a GPU or CPU int32 buffer for yaml duration and num_iterations, then emit hbm3_coverage_gb and a 0-100 loop_verification_pass_pct, to measure buffer integrity. RAS counter deltas come from amd-smi metric. RVS is not used"
   },
   {
     "field_name": "Workload Command Line Executable",
@@ -387,7 +387,7 @@
   {
     "field_name": "Execution Summary (Run and Measure)",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "Run an in-process PyTorch check that writes 1 to even-index elements of a GPU or CPU int32 buffer for yaml duration and num_iterations, then emit hbm3_coverage_gb and a 0-100 even_word_store_pass_rate, to measure buffer integrity. RAS counter deltas come from rocm-smi. RVS is not used"
+    "value": "Run an in-process PyTorch check that writes 1 to even-index elements of a GPU or CPU int32 buffer for yaml duration and num_iterations, then emit hbm3_coverage_gb and a 0-100 loop_verification_pass_pct, to measure buffer integrity. RAS counter deltas come from amd-smi metric. RVS is not used"
   },
   {
     "field_name": "nVidia Porting Instructions (Reference Only)",

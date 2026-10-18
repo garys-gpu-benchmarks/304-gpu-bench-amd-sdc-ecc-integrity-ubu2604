@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # File: run_benchmark.sh
-# Description: Runs a PyTorch GPU (or CPU) int32 buffer check that writes 1 to even-index elements and verifies them, then reports a 0-100 pass rate in even_word_store_pass_rate.
+# Description: Runs a PyTorch GPU (or CPU) int32 buffer check that writes 1 to even-index elements and verifies them, then reports a 0-100 pass rate in loop_verification_pass_pct.
 # Execution: bash run_benchmark.sh [--profile smoke|baseline|extended] [--validate]
 # Options: --profile, --smoke, --baseline, --extended, --device, --phase, --raw-file, --config, --validate, --help
 # Requirements: bash, python3, repository-local .venv
@@ -18,7 +18,7 @@ usage() {
   cat <<'USAGE'
 Usage: bash run_benchmark.sh [OPTIONS]
 
-Runs a PyTorch GPU (or CPU) int32 buffer check that writes 1 to even-index elements and verifies them, then reports a 0-100 pass rate in even_word_store_pass_rate.
+Runs a PyTorch GPU (or CPU) int32 buffer check that writes 1 to even-index elements and verifies them, then reports a 0-100 pass rate in loop_verification_pass_pct.
 
 Profiles:
   --profile <name>              Run profile: smoke|baseline|extended (default: smoke)
