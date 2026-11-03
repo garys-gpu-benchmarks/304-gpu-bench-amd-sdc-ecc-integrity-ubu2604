@@ -2,7 +2,7 @@
 
 ## Execution Description
 
-Runs a PyTorch GPU (or CPU) int32 buffer check that writes 1 to even-index elements and verifies them, then reports a 0-100 pass rate in loop_verification_pass_pct. duration: wall-clock cap (values >=10000 treated as milliseconds). num_iterations: verify loops. memory_size: allocation size in GB (clamped to at least 0.125). Sweep dimensions: device_id, memory_size, pattern_type, ecc_check, num_iterations, output_format, duration, count.
+Runs a PyTorch GPU (or CPU) int32 buffer check that writes 1 to even-index elements and verifies them, then reports a 0-100 pass rate in loop_verification_pass_pct. duration: wall-clock cap (values >=10000 treated as milliseconds). num_iterations: verify loops. memory_size: allocation size in GB (clamped to at least 0.125). Sweep dimensions: device_id, memory_size, pattern_type, num_iterations, duration.
 
 ## Parameters
 
@@ -11,12 +11,8 @@ Runs a PyTorch GPU (or CPU) int32 buffer check that writes 1 to even-index eleme
 | device_id | `--device-id` | smoke=0, baseline=0, extended=0 | 0 | From Parameter list; see Execution Description With Parameters. |
 | memory_size | `--memory-size` | smoke=1, baseline=1, extended=1 | 1 | From Parameter list; see Execution Description With Parameters. |
 | pattern_type | `--pattern-type` | smoke=walking-1s, baseline=walking-1s, extended=walking-1s | walking-1s | From Parameter list; see Execution Description With Parameters. |
-| ecc_check | `--ecc-check` | smoke=true, baseline=true, extended=true | true | From Parameter list; see Execution Description With Parameters. |
 | num_iterations | `--num-iterations` | smoke=2, baseline=3, extended=9 | 3 | From Parameter list; see Execution Description With Parameters. |
-| output_format | `--output-format` | smoke=csv, baseline=csv, extended=csv | csv | From Parameter list; see Execution Description With Parameters. |
 | duration | `--duration` | smoke=20000, baseline=183000, extended=730000 | 183000 | From Parameter list; see Execution Description With Parameters. |
-| count | `--count` | smoke=1, baseline=1, extended=1 | 1 | From Parameter list; see Execution Description With Parameters. |
-| seed | `--seed` | smoke=0, baseline=0, extended=0 | 0 | From Parameter list; see Execution Description With Parameters. |
 
 ## Invocation
 

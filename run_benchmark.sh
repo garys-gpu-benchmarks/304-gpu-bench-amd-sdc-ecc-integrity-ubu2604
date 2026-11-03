@@ -48,12 +48,8 @@ Workload options:
   --device-id <value>            Override device_id
   --memory-size <value>            Override memory_size
   --pattern-type <value>            Override pattern_type
-  --ecc-check <value>            Override ecc_check
   --num-iterations <value>            Override num_iterations
-  --output-format <value>            Override output_format
   --duration <value>            Override duration
-  --count <value>            Override count
-  --seed <value>            Override seed
 
 Information:
   --specification               Print this workload's specification and exit
@@ -90,12 +86,8 @@ SAVE_OPTIONS_FILE=""
 DEVICE_ID=""
 MEMORY_SIZE=""
 PATTERN_TYPE=""
-ECC_CHECK=""
 NUM_ITERATIONS=""
-OUTPUT_FORMAT=""
 DURATION=""
-COUNT=""
-SEED=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -119,12 +111,8 @@ while [[ $# -gt 0 ]]; do
     --device-id) DEVICE_ID="${2:-}"; shift 2 ;;
     --memory-size) MEMORY_SIZE="${2:-}"; shift 2 ;;
     --pattern-type) PATTERN_TYPE="${2:-}"; shift 2 ;;
-    --ecc-check) ECC_CHECK="${2:-}"; shift 2 ;;
     --num-iterations) NUM_ITERATIONS="${2:-}"; shift 2 ;;
-    --output-format) OUTPUT_FORMAT="${2:-}"; shift 2 ;;
     --duration) DURATION="${2:-}"; shift 2 ;;
-    --count) COUNT="${2:-}"; shift 2 ;;
-    --seed) SEED="${2:-}"; shift 2 ;;
     --help|--specification|--matrix-definition) shift ;;
     *) die "Unknown option: $1" ;;
   esac
@@ -166,12 +154,8 @@ PY
 DEVICE_ID="${DEVICE_ID:-$(yaml_get device_id)}"
 MEMORY_SIZE="${MEMORY_SIZE:-$(yaml_get memory_size)}"
 PATTERN_TYPE="${PATTERN_TYPE:-$(yaml_get pattern_type)}"
-ECC_CHECK="${ECC_CHECK:-$(yaml_get ecc_check)}"
 NUM_ITERATIONS="${NUM_ITERATIONS:-$(yaml_get num_iterations)}"
-OUTPUT_FORMAT="${OUTPUT_FORMAT:-$(yaml_get output_format)}"
 DURATION="${DURATION:-$(yaml_get duration)}"
-COUNT="${COUNT:-$(yaml_get count)}"
-SEED="${SEED:-$(yaml_get seed)}"
 OUTPUT_FORMAT="${OUTPUT_FORMAT:-$(yaml_get output_format)}"
 OUTPUT_FORMAT="${OUTPUT_FORMAT:-csv}"
 
@@ -180,12 +164,8 @@ BENCHMARK_RUN_COMMAND="bash run_benchmark.sh --${PROFILE}"
 [[ -n "${DEVICE_ID}" ]] && BENCHMARK_RUN_COMMAND+=" --device-id $(printf %q "${DEVICE_ID}")"
 [[ -n "${MEMORY_SIZE}" ]] && BENCHMARK_RUN_COMMAND+=" --memory-size $(printf %q "${MEMORY_SIZE}")"
 [[ -n "${PATTERN_TYPE}" ]] && BENCHMARK_RUN_COMMAND+=" --pattern-type $(printf %q "${PATTERN_TYPE}")"
-[[ -n "${ECC_CHECK}" ]] && BENCHMARK_RUN_COMMAND+=" --ecc-check $(printf %q "${ECC_CHECK}")"
 [[ -n "${NUM_ITERATIONS}" ]] && BENCHMARK_RUN_COMMAND+=" --num-iterations $(printf %q "${NUM_ITERATIONS}")"
-[[ -n "${OUTPUT_FORMAT}" ]] && BENCHMARK_RUN_COMMAND+=" --output-format $(printf %q "${OUTPUT_FORMAT}")"
 [[ -n "${DURATION}" ]] && BENCHMARK_RUN_COMMAND+=" --duration $(printf %q "${DURATION}")"
-[[ -n "${COUNT}" ]] && BENCHMARK_RUN_COMMAND+=" --count $(printf %q "${COUNT}")"
-[[ -n "${SEED}" ]] && BENCHMARK_RUN_COMMAND+=" --seed $(printf %q "${SEED}")"
 set_benchmark_run_command "${BENCHMARK_RUN_COMMAND}"
 
 HOSTNAME_VALUE="$(hostname -s 2>/dev/null || hostname)"
@@ -231,12 +211,8 @@ run_collection() {
   grep -q -- '--device-id' <<<"${help}" && collect_args+=(--device-id "${DEVICE_ID}")
   grep -q -- '--memory-size' <<<"${help}" && collect_args+=(--memory-size "${MEMORY_SIZE}")
   grep -q -- '--pattern-type' <<<"${help}" && collect_args+=(--pattern-type "${PATTERN_TYPE}")
-  grep -q -- '--ecc-check' <<<"${help}" && collect_args+=(--ecc-check "${ECC_CHECK}")
   grep -q -- '--num-iterations' <<<"${help}" && collect_args+=(--num-iterations "${NUM_ITERATIONS}")
-  grep -q -- '--output-format' <<<"${help}" && collect_args+=(--output-format "${OUTPUT_FORMAT}")
   grep -q -- '--duration' <<<"${help}" && collect_args+=(--duration "${DURATION}")
-  grep -q -- '--count' <<<"${help}" && collect_args+=(--count "${COUNT}")
-  grep -q -- '--seed' <<<"${help}" && collect_args+=(--seed "${SEED}")
 
   printf -v collect_cmd '%q ' "${PYTHON_BIN}" scripts/collect_workload.py "${collect_args[@]}"
   echo "[RUN] ${collect_cmd}"

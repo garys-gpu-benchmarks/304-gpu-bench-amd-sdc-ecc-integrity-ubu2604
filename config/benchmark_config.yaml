@@ -11,15 +11,11 @@ sweep:
   device_id: 0
   memory_size: 1
   pattern_type: walking-1s
-  ecc_check: true
   num_iterations:
     smoke: 2
     baseline: 3
     extended: 9
-  output_format: csv
   duration:
     smoke: 20000
     baseline: 183000
     extended: 730000
-  count: 1
-  seed: 0
