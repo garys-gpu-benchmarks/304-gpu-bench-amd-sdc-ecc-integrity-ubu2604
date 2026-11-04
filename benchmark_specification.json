@@ -25,6 +25,11 @@
     "value": "gpu-bench-amd-sdc-ecc-integrity-ubu2604"
   },
   {
+    "field_name": "Repo Directory Name",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "304-gpu-bench-amd-sdc-ecc-integrity-ubu2604"
+  },
+  {
     "field_name": "Main Goal",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
     "value": "Analyze GPU buffer even-index write/verify integrity via a PyTorch SDC stub"
