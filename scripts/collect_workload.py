@@ -171,9 +171,6 @@ def main() -> int:
         for _ in range(iters):
             buf = torch.zeros(n, device=device, dtype=torch.int32)
             if pattern in {"walking-1s", "walking-ones", "walking_1s"}:
-                # arange() is int64. Shifting int32 ones by that promotes the
-                # expected buffer; copy_ then wraps 1<<31 into int32 and the
-                # compare against the wide tensor fails every loop.
                 shifts = (torch.arange(n, device=device) % 32).to(dtype=torch.int32)
                 expected = (torch.ones(n, device=device, dtype=torch.int32) << shifts).to(dtype=torch.int32)
                 buf.copy_(expected)
