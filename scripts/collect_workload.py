@@ -171,14 +171,11 @@ def main() -> int:
         for _ in range(iters):
             buf = torch.zeros(n, device=device, dtype=torch.int32)
             if pattern in {"walking-1s", "walking-ones", "walking_1s"}:
-                # arange() is int64. int32 << int64 promotes to int64, so 1<<31
-                # becomes 2147483648. copy_ into the int32 buffer wraps that lane
-                # to -2147483648 and the compare then fails every loop.
-                shifts = torch.arange(n, device=device, dtype=torch.int32) % 32
-                expected = torch.bitwise_left_shift(
-                    torch.ones(n, device=device, dtype=torch.int32),
-                    shifts,
-                )
+                # arange() is int64. Shifting int32 ones by that promotes the
+                # expected buffer; copy_ then wraps 1<<31 into int32 and the
+                # compare against the wide tensor fails every loop.
+                shifts = (torch.arange(n, device=device) % 32).to(dtype=torch.int32)
+                expected = (torch.ones(n, device=device, dtype=torch.int32) << shifts).to(dtype=torch.int32)
                 buf.copy_(expected)
                 mismatch_count = int((buf != expected).sum().item())
             else:
