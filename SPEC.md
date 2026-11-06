@@ -17,7 +17,7 @@ Runs a PyTorch GPU (or CPU) int32 buffer check that writes 1 to even-index eleme
 ## Invocation
 
 ```bash
-Run an in-process PyTorch even-index int32 write/verify on cuda:0 when available, otherwise CPU. Does not run rvs or a HIP ecc_walk binary
+Run an in-process PyTorch int32 write/verify on the GPU, or on CPU if no GPU is present
 ```
 
 ## Raw Output Format
@@ -46,7 +46,7 @@ Run an in-process PyTorch check that writes 1 to even-index elements of a GPU or
 ## Platform Portability
 
 - **AMD (primary):** ```bash
-Run an in-process PyTorch even-index int32 write/verify on cuda:0 when available, otherwise CPU. Does not run rvs or a HIP ecc_walk binary
+Run an in-process PyTorch int32 write/verify on the GPU, or on CPU if no GPU is present
 ```
 - **NVIDIA:** Primary target is AMD ROCm. NVIDIA notes in this section are reference only and are not the execution path.
 

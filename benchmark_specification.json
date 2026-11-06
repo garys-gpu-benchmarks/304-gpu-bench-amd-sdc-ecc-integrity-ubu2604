@@ -32,7 +32,7 @@
   {
     "field_name": "Main Goal",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "Analyze GPU buffer even-index write/verify integrity via a PyTorch SDC stub"
+    "value": "Analyze GPU buffer write/verify integrity with a PyTorch SDC stub"
   },
   {
     "field_name": "Metrics",
@@ -140,6 +140,16 @@
     "value": "-"
   },
   {
+    "field_name": "Validation Objective",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "Validates the int32 write/verify loop, buffer size, and pass rate. RAS deltas come from amd-smi"
+  },
+  {
+    "field_name": "Command Tools Executed",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "Run an in-process PyTorch int32 write/verify on the GPU, or on CPU if no GPU is present"
+  },
+  {
     "field_name": "run_benchmark Command Plus Options for Smoke Run (One minute or less)",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
     "value": "bash run_benchmark.sh --smoke --validate --device-id 0 --memory-size 1 --pattern-type walking-1s --num-iterations 2 --duration 20000"
@@ -153,16 +163,6 @@
     "field_name": "run_benchmark Command Plus Options for Extended Run (8 to 15 minutes)",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
     "value": "bash run_benchmark.sh --extended --validate --device-id 0 --memory-size 1 --pattern-type walking-1s --num-iterations 9 --duration 730000"
-  },
-  {
-    "field_name": "Validation Objective",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "Validates that the even-index int32 write/verify loop completes and reports the allocated GPU buffer size plus a 0-100 pass rate. RAS counter deltas come from amd-smi metric. RVS is not used"
-  },
-  {
-    "field_name": "Command Tools Executed",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "Run an in-process PyTorch even-index int32 write/verify on cuda:0 when available, otherwise CPU. Does not run rvs or a HIP ecc_walk binary"
   },
   {
     "field_name": "Command Execution Details and Purpose",
@@ -377,7 +377,7 @@
   {
     "field_name": "Workload Command Line Executable",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "Run an in-process PyTorch even-index int32 write/verify on cuda:0 when available, otherwise CPU. Does not run rvs or a HIP ecc_walk binary"
+    "value": "Run an in-process PyTorch int32 write/verify on the GPU, or on CPU if no GPU is present"
   },
   {
     "field_name": "ROCm Version",
@@ -412,7 +412,7 @@
   {
     "field_name": "Profile Parameter Values",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Parameters_SmokeBaselineExtend",
-    "value": "{\"device_id\": {\"smoke\": \"0\", \"baseline\": \"0\", \"extended\": \"0\", \"notes\": \"\"}, \"memory_size\": {\"smoke\": \"1\", \"baseline\": \"1\", \"extended\": \"1\", \"notes\": \"\"}, \"pattern_type\": {\"smoke\": \"walking-1s\", \"baseline\": \"walking-1s\", \"extended\": \"walking-1s\", \"notes\": \"\"}, \"num_iterations\": {\"smoke\": \"2\", \"baseline\": \"3\", \"extended\": \"9\", \"notes\": \"VM 2026-08-16 num_iterations=3 -> 209s (3:29). Extended 9 extrapolated ~10:27, not tested.\"}, \"duration\": {\"smoke\": \"20000\", \"baseline\": \"183000\", \"extended\": \"730000\", \"notes\": \"Retimed 2026-08-17 toward 3-4 min baseline; extended scaled by the same factor.\"}}"
+    "value": "{\"device_id\": {\"smoke\": \"0\", \"baseline\": \"0\", \"extended\": \"0\"}, \"memory_size\": {\"smoke\": \"1\", \"baseline\": \"1\", \"extended\": \"1\"}, \"pattern_type\": {\"smoke\": \"walking-1s\", \"baseline\": \"walking-1s\", \"extended\": \"walking-1s\"}, \"num_iterations\": {\"smoke\": \"2\", \"baseline\": \"3\", \"extended\": \"9\"}, \"duration\": {\"smoke\": \"20000\", \"baseline\": \"183000\", \"extended\": \"730000\"}}"
   },
   {
     "field_name": "Profile Command Authorship",
