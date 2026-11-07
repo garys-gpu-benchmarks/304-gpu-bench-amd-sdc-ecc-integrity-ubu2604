@@ -3,7 +3,7 @@
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 [![CI](https://github.com/garys-gpu-benchmarks/304-gpu-bench-amd-sdc-ecc-integrity-ubu2604/actions/workflows/ci.yml/badge.svg)](https://github.com/garys-gpu-benchmarks/304-gpu-bench-amd-sdc-ecc-integrity-ubu2604/actions/workflows/ci.yml)
 
-Analyzes GPU buffer write/verify integrity with a PyTorch SDC stub. Workload 304 of the AMD Ubuntu 26.04 bundle.
+Analyzes GPU buffer write/verify integrity via a PyTorch pattern verifier. Workload 304 of the AMD Ubuntu 26.04 bundle.
 
 ## Quick Start
 
@@ -83,7 +83,7 @@ cd /opt/benchmarks
 ./show_metrics.sh 304                       # this workload's runs from the ledger
 ```
 
-The suite tools (`run_benchmark_suite.sh`, `get_benchmark_results.sh`, `show_ledger_runs.sh`, `show_metrics.sh`) are documented in [`gpu-bench-suite`](https://github.com/garys-gpu-benchmarks/gpu-bench-suite).
+The suite tools (`run_benchmark_suite.sh`, `get_benchmark_results.sh`, `list_runs.sh`, `show_metrics.sh`) are documented in [`gpu-bench-suite`](https://github.com/garys-gpu-benchmarks/gpu-bench-suite).
 
 Other platforms: [AMD 24.04](https://github.com/garys-gpu-benchmarks/bundle-amd-ubuntu-2404) (101–132), [NVIDIA 24.04](https://github.com/garys-gpu-benchmarks/bundle-nvidia-ubuntu-2404) (201–232), [NVIDIA 26.04](https://github.com/garys-gpu-benchmarks/bundle-nvidia-ubuntu-2604) (401–432).
 

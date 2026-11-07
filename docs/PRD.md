@@ -18,7 +18,7 @@ Silent Data Corruption (SDC)
 Run an in-process PyTorch check that writes 1 to even-index elements of a GPU or CPU int32 buffer for yaml duration and num_iterations, then emit hbm3_coverage_gb and a 0-100 loop_verification_pass_pct, to measure buffer integrity. RAS counter deltas come from amd-smi metric. RVS is not used
 
 ## Main Goal
-Analyze GPU buffer write/verify integrity with a PyTorch SDC stub
+Analyze GPU buffer write/verify integrity via a PyTorch pattern verifier
 
 ## Validation Objective
 Validates the int32 write/verify loop, buffer size, and pass rate. RAS deltas come from amd-smi

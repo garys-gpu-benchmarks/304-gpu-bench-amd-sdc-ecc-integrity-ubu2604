@@ -20,7 +20,7 @@ usage() {
 Usage: bash run_benchmark.sh [OPTIONS]
 
 Workload Name:          Silent Data Corruption (SDC).
-Main Goal:              Analyze GPU buffer write/verify integrity with a PyTorch SDC stub.
+Main Goal:              Analyze GPU buffer write/verify integrity via a PyTorch pattern verifier.
 Command Tools Executed: Run an in-process PyTorch int32 write/verify on the GPU, or on CPU if no GPU
                         is present.
 
@@ -34,7 +34,10 @@ Parameters (override the profile's value):
   --memory-size <value>         Shared workload parameter (smoke/baseline/extended: 1)
   --pattern-type <value>        Shared workload parameter (smoke/baseline/extended: walking-1s)
   --num-iterations <n>          Number of timed repetitions (smoke 2, baseline 3, extended 9)
-  --duration <n>                Wall-clock or sampling duration (smoke 20000, baseline 183000, extended 730000)
+  --duration <n>                Wall-clock or sampling duration
+                                  smoke:    20000
+                                  baseline: 183000
+                                  extended: 730000
 
 General options:
   --config <file>               Config file (default: config/benchmark_config.yaml)
