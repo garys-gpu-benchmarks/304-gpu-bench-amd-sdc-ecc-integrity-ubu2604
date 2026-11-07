@@ -16,12 +16,11 @@ capture_benchmark_run_command_submitted "$@"
 
 usage() {
   cat <<'USAGE'
+
 Usage: bash run_benchmark.sh [OPTIONS]
 
 Workload Name:          Silent Data Corruption (SDC).
 Main Goal:              Analyze GPU buffer write/verify integrity with a PyTorch SDC stub.
-Validation Objective:   Validates the int32 write/verify loop, buffer size, and pass rate. RAS
-                        deltas come from amd-smi.
 Command Tools Executed: Run an in-process PyTorch int32 write/verify on the GPU, or on CPU if no GPU
                         is present.
 

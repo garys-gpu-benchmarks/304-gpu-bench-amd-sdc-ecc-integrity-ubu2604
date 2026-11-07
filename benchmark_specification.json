@@ -35,6 +35,11 @@
     "value": "Analyze GPU buffer write/verify integrity with a PyTorch SDC stub"
   },
   {
+    "field_name": "Command Tools Executed",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "Run an in-process PyTorch int32 write/verify on the GPU, or on CPU if no GPU is present"
+  },
+  {
     "field_name": "Metrics",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
     "value": "#1: RAS uncorrectable counter delta (uncorrected_ecc_errors_count); #2: RAS correctable counter delta (corrected_ecc_errors_count); #3: Wall-clock time, s (test_wall_clock_completion_time_s); #4: Allocated verification buffer, GB (allocated_verification_buffer_gb); #5: Loop verification pass rate, % (loop_verification_pass_pct)"
@@ -140,16 +145,6 @@
     "value": "-"
   },
   {
-    "field_name": "Validation Objective",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "Validates the int32 write/verify loop, buffer size, and pass rate. RAS deltas come from amd-smi"
-  },
-  {
-    "field_name": "Command Tools Executed",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "Run an in-process PyTorch int32 write/verify on the GPU, or on CPU if no GPU is present"
-  },
-  {
     "field_name": "run_benchmark Command Plus Options for Smoke Run (One minute or less)",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
     "value": "bash run_benchmark.sh --smoke --validate --device-id 0 --memory-size 1 --pattern-type walking-1s --num-iterations 2 --duration 20000"
@@ -163,6 +158,11 @@
     "field_name": "run_benchmark Command Plus Options for Extended Run (8 to 15 minutes)",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
     "value": "bash run_benchmark.sh --extended --validate --device-id 0 --memory-size 1 --pattern-type walking-1s --num-iterations 9 --duration 730000"
+  },
+  {
+    "field_name": "Validation Objective",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "Validates the int32 write/verify loop, buffer size, and pass rate. RAS deltas come from amd-smi"
   },
   {
     "field_name": "Command Execution Details and Purpose",
