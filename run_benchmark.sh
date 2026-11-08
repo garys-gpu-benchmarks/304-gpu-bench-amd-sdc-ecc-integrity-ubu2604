@@ -19,10 +19,10 @@ usage() {
 
 Usage: bash run_benchmark.sh [OPTIONS]
 
-Workload Name:          Silent Data Corruption (SDC).
-Main Goal:              Analyze GPU buffer write/verify integrity via a PyTorch pattern verifier.
+Workload Name:          Silent Data Corruption (SDC)
+Main Goal:              Analyze GPU buffer write/verify integrity via a PyTorch pattern verifier
 Command Tools Executed: Run an in-process PyTorch int32 write/verify on the GPU, or on CPU if no GPU
-                        is present.
+                        is present
 
 Profiles (default: --smoke):
   --smoke                       Run smoke profile

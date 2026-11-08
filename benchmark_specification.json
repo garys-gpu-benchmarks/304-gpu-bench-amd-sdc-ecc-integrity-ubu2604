@@ -205,14 +205,14 @@
     "value": "MI300X"
   },
   {
-    "field_name": "Raw Output Format",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "CSV aggregate of the verify run. A single row is duplicated to two samples"
-  },
-  {
     "field_name": "Primary Record Granularity",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
     "value": "one aggregate CSV row for the whole verify run, duplicated to two samples"
+  },
+  {
+    "field_name": "Raw Output Format",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "CSV aggregate of the verify run. A single row is duplicated to two samples"
   },
   {
     "field_name": "Raw Output Example",
@@ -225,14 +225,14 @@
     "value": "uncorrected_ecc_errors_count, corrected_ecc_errors_count, test_wall_clock_completion_time_s, hbm3_coverage_gb, loop_verification_pass_pct"
   },
   {
-    "field_name": "Success Criteria",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "status=ok, the walk pass rate and buffer-size gates pass, and the RAS counter deltas stay 0"
-  },
-  {
     "field_name": "Parser and Normalization Notes",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
     "value": "ECC fields are amd-smi metric RAS counter deltas. A table that names the columns and yields no counts is na (RAS table not parsed). hbm3_coverage_gb is the allocated int32 buffer in GB (n*4/1e9), capped near half of free VRAM. loop_verification_pass_pct is the percent of write/verify loops with no mismatch; each loop checks the even and the odd indexes. The aggregate row is written twice"
+  },
+  {
+    "field_name": "Success Criteria",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "status=ok, the walk pass rate and buffer-size gates pass, and the RAS counter deltas stay 0"
   },
   {
     "field_name": "Hardware Config",
