@@ -40,6 +40,11 @@
     "value": "Run an in-process PyTorch int32 write/verify on the GPU, or on CPU if no GPU is present"
   },
   {
+    "field_name": "Execution Description With Parameters",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "Runs a PyTorch GPU (or CPU) int32 buffer check that writes 1 to even-index elements and verifies them, then reports a 0-100 pass rate in loop_verification_pass_pct. duration: wall-clock cap (values >=10000 treated as milliseconds). num_iterations: verify loops. memory_size: allocation size in GB (clamped to at least 0.125). pattern_type, ecc_check, device_id, and seed are yaml fields and are not applied. This is not rvs. Uncorrected and corrected columns are amd-smi metric RAS counter deltas, or na when the RAS table does not parse. A CPU fallback leaves hbm3_coverage_gb blank"
+  },
+  {
     "field_name": "Metrics",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
     "value": "#1: RAS uncorrectable counter delta (uncorrected_ecc_errors_count); #2: RAS correctable counter delta (corrected_ecc_errors_count); #3: Wall-clock time, s (test_wall_clock_completion_time_s); #4: Allocated verification buffer, GB (allocated_verification_buffer_gb); #5: Loop verification pass rate, % (loop_verification_pass_pct)"
@@ -173,11 +178,6 @@
     "field_name": "Command Methodology",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
     "value": "Allocate a torch.int32 buffer, write 1 to even indices and verify those cells for yaml duration and num_iterations, and emit the allocated GPU buffer size in GB plus a 0-100 pass rate. CPU fallback leaves that size blank. ECC columns are RAS counter deltas. This is not a bit-level walking-1s sweep and is not rvs -c config.yaml"
-  },
-  {
-    "field_name": "Execution Description With Parameters",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "Runs a PyTorch GPU (or CPU) int32 buffer check that writes 1 to even-index elements and verifies them, then reports a 0-100 pass rate in loop_verification_pass_pct. duration: wall-clock cap (values >=10000 treated as milliseconds). num_iterations: verify loops. memory_size: allocation size in GB (clamped to at least 0.125). pattern_type, ecc_check, device_id, and seed are yaml fields and are not applied. This is not rvs. Uncorrected and corrected columns are amd-smi metric RAS counter deltas, or na when the RAS table does not parse. A CPU fallback leaves hbm3_coverage_gb blank"
   },
   {
     "field_name": "Execution Domain",
