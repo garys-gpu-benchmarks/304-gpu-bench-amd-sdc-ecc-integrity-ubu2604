@@ -11,16 +11,16 @@ Reference results from the validation run on the system shown in each section (r
 ## smoke
 
 - **System:** 1× AMD Instinct MI300X VF (196288 MB) · INTEL(R) XEON(R) PLATINUM 8568Y+ · Ubuntu 26.04.1 LTS · kernel 7.0.0-43-generic · driver 7.1.9.31600000
-- **Run:** 2026-11-22T10:47:15Z · status **PASS** (exit 0)
-- **Time (mm:ss):** setup 01:06 · benchmark 00:22 · whole run 01:36
-- **Source:** run 304_20261122_104715
+- **Run:** 2026-11-22T14:11:49Z · status **PASS** (exit 0)
+- **Time (mm:ss):** setup 02:01 · benchmark 00:22 · whole run 02:31
+- **Source:** run 304_20261122_141149
 - **Command:** `bash run_benchmark.sh --smoke --device-id 0 --memory-size 1 --pattern-type walking-1s --num-iterations 2 --duration 20000`
 
 | # | Metric | Result |
 |---|---|---|
 | 1 | RAS uncorrectable counter delta (uncorrected_ecc_errors_count) | 0.0 |
 | 2 | RAS correctable counter delta (corrected_ecc_errors_count) | 0.0 |
-| 3 | Wall-clock time, s (test_wall_clock_completion_time_s) | 20.006045818328857 |
+| 3 | Wall-clock time, s (test_wall_clock_completion_time_s) | 20.000993490219116 |
 | 4 | Allocated verification buffer, GB (allocated_verification_buffer_gb) | 1.073741824 |
 | 5 | Loop verification pass rate, % (loop_verification_pass_pct) | 100.0 |
 <!-- /profile:smoke -->
